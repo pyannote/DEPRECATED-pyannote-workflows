@@ -11,8 +11,20 @@ contain labels of type `string`.
 
 ## Automatic output
 
-Adding `AutoOutput` to a task will automagically add a `out_put` method to
-the task that ...
+Adding `AutoOutput` mixin to a `sciluigi.Task` will automagically add method
+called `out_put` that generates a file whose path is derived from the hashing
+or all `in_xxxx().path` and all task parameters with the following structure:
+
+```
+workdir/workflow_name/instance_name/hash
+```
+
+where
+  * `workdir` is the value of parameter `sciluigi.WorkflowTask.workdir`,
+  * `workflow_name` is the workflow class name,
+  * `instance_name` is the name of the task used in `self.new_task(instance_name, ...)`
+  * `hash` is a hash that uniquely identify a task based on its inputs paths
+  and its parameters.
 
 For the `AutoOutput` mixin to be functional, all inputs must be declared as
 task attributes directly.

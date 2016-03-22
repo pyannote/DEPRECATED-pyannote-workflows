@@ -37,8 +37,6 @@ class Audio(sciluigi.ExternalTask):
 
 class Subtitles(sciluigi.Task, AutoOutput):
 
-    workdir = luigi.Parameter()
-
     series = luigi.Parameter()
     season = luigi.IntParameter()
     episode = luigi.IntParameter()
@@ -60,8 +58,6 @@ class Subtitles(sciluigi.Task, AutoOutput):
 class SubtitlesTimeline(sciluigi.Task, AutoOutput):
     """Timeline containing one segment per subtitle timespans"""
 
-    workdir = luigi.Parameter()
-
     in_subtitles = None
 
     def run(self):
@@ -80,8 +76,6 @@ class SubtitlesTimeline(sciluigi.Task, AutoOutput):
 
 class SubtitlesAnnotation(sciluigi.Task, AutoOutput):
     """Annotation containing one label per subtitle timespans"""
-
-    workdir = luigi.Parameter()
 
     in_subtitles = None
 
@@ -105,8 +99,6 @@ class SubtitlesAnnotation(sciluigi.Task, AutoOutput):
 class SubtitlesSpeechNonSpeech(sciluigi.Task, AutoOutput):
     """Annotation containing 'speech' and 'non-speech' labels based
     on subtitles timespans"""
-
-    workdir = luigi.Parameter()
 
     in_wav = None
     in_subtitles = None
@@ -139,7 +131,6 @@ class SubtitlesSpeechNonSpeech(sciluigi.Task, AutoOutput):
 
 class Speaker(sciluigi.Task, AutoOutput):
 
-    workdir = luigi.Parameter()
     series = luigi.Parameter()
     season = luigi.IntParameter()
     episode = luigi.IntParameter()
@@ -155,8 +146,6 @@ class Speaker(sciluigi.Task, AutoOutput):
 
 
 class SpeechNonSpeech(sciluigi.Task, AutoOutput):
-
-    workdir = luigi.Parameter()
 
     in_wav = None
     in_speaker = None
@@ -189,7 +178,6 @@ class SpeechNonSpeech(sciluigi.Task, AutoOutput):
 
 class Speech(sciluigi.Task, AutoOutput):
 
-    workdir = luigi.Parameter()
     fill_gaps = luigi.FloatParameter(default=1.000)
 
     in_wav = None

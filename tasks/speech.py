@@ -15,7 +15,6 @@ from pyannote.core import Segment, Timeline, Annotation
 
 
 class MFCC(sciluigi.Task, AutoOutput):
-    workdir = luigi.Parameter()
 
     in_audio = None
 
@@ -43,7 +42,6 @@ class MFCC(sciluigi.Task, AutoOutput):
 
 class BICSegmentation(sciluigi.Task, AutoOutput):
 
-    workdir = luigi.Parameter()
     in_segmentation = None
     in_features = None
 
@@ -78,7 +76,6 @@ class BICSegmentation(sciluigi.Task, AutoOutput):
 
 class LinearBICClustering(sciluigi.Task, AutoOutput):
 
-    workdir = luigi.Parameter()
     in_segmentation = None
     in_features = None
 
@@ -105,7 +102,6 @@ class LinearBICClustering(sciluigi.Task, AutoOutput):
 
 class BICClustering(sciluigi.Task, AutoOutput):
 
-    workdir = luigi.Parameter()
     in_segmentation = None
     in_features = None
 
@@ -132,7 +128,6 @@ class BICClustering(sciluigi.Task, AutoOutput):
 
 class TrainResegmentation(sciluigi.Task, AutoOutput):
 
-    workdir = luigi.Parameter()
     in_segmentation = None
     in_features = None
 
@@ -164,7 +159,6 @@ class TrainResegmentation(sciluigi.Task, AutoOutput):
 
 class ApplyResegmentation(sciluigi.Task, AutoOutput):
 
-    workdir = luigi.Parameter()
     in_model = None
     in_features = None
 

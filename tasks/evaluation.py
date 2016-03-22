@@ -9,8 +9,6 @@ from sciluigi_workflows.utils import AutoOutput
 
 class EvaluateSpeechActivityDetection(sciluigi.Task, AutoOutput):
 
-    workdir = luigi.Parameter()
-
     in_reference = None
     in_hypothesis = None
 
@@ -41,8 +39,6 @@ class EvaluateSpeechActivityDetection(sciluigi.Task, AutoOutput):
 
 
 class EvaluateDiarization(sciluigi.Task, AutoOutput):
-
-    workdir = luigi.Parameter()
 
     in_hypothesis = None
     in_reference = None

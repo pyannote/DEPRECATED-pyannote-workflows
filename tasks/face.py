@@ -10,7 +10,6 @@ from sciluigi_workflows.utils import AutoOutput
 
 class PrecomputeClustering(sciluigi.Task, AutoOutput):
 
-    workdir = luigi.Parameter()
     in_openface = None
 
     def run(self):
@@ -26,8 +25,6 @@ class PrecomputeClustering(sciluigi.Task, AutoOutput):
 
 
 class Clustering(sciluigi.Task, AutoOutput):
-
-    workdir = luigi.Parameter()
 
     in_precomputed = None
     threshold = luigi.FloatParameter()

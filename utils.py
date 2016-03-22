@@ -18,6 +18,7 @@ class Hyperopt(sciluigi.Task):
         with self.out_put().open('w') as fp:
             fp.write(self.in_evaluation().path)
 
+
 class AutoOutput(object):
 
     def _output_from_hash(self):
@@ -27,15 +28,17 @@ class AutoOutput(object):
         params = self.get_params()
         params = [name for name, _ in params]
 
+        workdir = self.workflow_task.workdir
+
         for attrname, attrval in six.iteritems(self.__dict__):
             if 'in_' == attrname[0:3]:
                 path = attrval().path
-                if path.startswith(self.workdir):
-                    path = path[len(self.workdir):]
+                if path.startswith(workdir):
+                    path = path[len(workdir):]
                 description[attrname] = path
 
         for param_name in params:
-            if param_name in ['instance_name', 'workflow_task', 'workdir']:
+            if param_name in ['instance_name', 'workflow_task']:
                 continue
             description[param_name] = getattr(self, param_name)
 
@@ -44,7 +47,7 @@ class AutoOutput(object):
 
         output_path = '{workdir}/{workflow_name}/{instance_name}/{digest}'
         return output_path.format(
-            workdir=self.workdir,
+            workdir=workdir,
             instance_name=self.instance_name,
             workflow_name=self.workflow_task.__class__.__name__,
             digest=digest)
