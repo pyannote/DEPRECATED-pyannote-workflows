@@ -5,7 +5,7 @@ import pickle
 import pyannote.core.json
 import pyannote.video.face.clustering
 
-from sciluigi_workflows.utils import AutoOutput
+from pyannote_workflows.utils import AutoOutput
 
 
 class PrecomputeClustering(sciluigi.Task, AutoOutput):

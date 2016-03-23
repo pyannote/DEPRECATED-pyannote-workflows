@@ -11,7 +11,7 @@ import pyannote.core.json
 from pyannote.core import Segment, Timeline, Annotation
 import pyannote.parser
 
-from sciluigi_workflows.utils import AutoOutput
+from pyannote_workflows.utils import AutoOutput
 
 
 def get_episode(task):

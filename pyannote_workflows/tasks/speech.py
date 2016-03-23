@@ -1,7 +1,7 @@
 import luigi
 import sciluigi
 
-from sciluigi_workflows.utils import AutoOutput
+from pyannote_workflows.utils import AutoOutput
 
 import pickle
 import pyannote.core.json
@@ -18,7 +18,7 @@ class MFCC(sciluigi.Task, AutoOutput):
 
     in_audio = None
 
-    e = luigi.BoolParameter(default=True)
+    e = luigi.BoolParameter()
     De = luigi.BoolParameter(default=True)
     DDe = luigi.BoolParameter(default=True)
 

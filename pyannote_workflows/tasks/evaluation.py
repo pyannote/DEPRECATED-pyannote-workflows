@@ -4,7 +4,7 @@ import pyannote.metrics.detection
 import pyannote.metrics.diarization
 import pyannote.core.json
 
-from sciluigi_workflows.utils import AutoOutput
+from pyannote_workflows.utils import AutoOutput
 
 
 class EvaluateSpeechActivityDetection(sciluigi.Task, AutoOutput):

@@ -23,13 +23,14 @@ class AutoOutput(object):
 
     def _output_from_hash(self):
 
-        description = {}
-
-        params = self.get_params()
-        params = [name for name, _ in params]
-
+        # working directory within which all automatic outputs will be stored
         workdir = self.workflow_task.workdir
 
+        description = {}
+
+        # add one {key: value} per in_xxxx method
+        # key = 'in_xxxx'
+        # value = F(in_xxxx().path)
         for attrname, attrval in six.iteritems(self.__dict__):
             if 'in_' == attrname[0:3]:
                 path = attrval().path
@@ -37,14 +38,22 @@ class AutoOutput(object):
                     path = path[len(workdir):]
                 description[attrname] = path
 
+        # add one {key: value} per task parameter
+        # key = parameter name
+        # value = parameter value
+        params = self.get_params()
+        params = [name for name, _ in params]
         for param_name in params:
+            # do not take 'instance_name' and 'workflow_task' into account
             if param_name in ['instance_name', 'workflow_task']:
                 continue
             description[param_name] = getattr(self, param_name)
 
+        # hash the resulting dictionary
         digest = hashlib.sha1(
             json.dumps(description, sort_keys=True)).hexdigest()
 
+        # generate out_put path automatically
         output_path = '{workdir}/{workflow_name}/{instance_name}/{digest}'
         return output_path.format(
             workdir=workdir,
@@ -53,17 +62,16 @@ class AutoOutput(object):
             digest=digest)
 
     def out_put(self):
+        # automagically get out_put path
         path = self._output_from_hash()
         return sciluigi.TargetInfo(self, path)
 
 
-# def decrypt(workflow):
-#     decrypted = {}
-#     for instance_name, task in six.iteritems(workflow._tasks):
-#         decrypted[instance_name] = task.out_put().path
-#         print task.__dict__
-#     return decrypted
-
+def getAllOutputs(workflow):
+    out_puts = {}
+    for instance_name, task in six.iteritems(workflow._tasks):
+        out_puts[instance_name] = task.out_put().path
+    return out_puts
 
 # def hyperoptify(Workflow, output='out_put'):
 #
