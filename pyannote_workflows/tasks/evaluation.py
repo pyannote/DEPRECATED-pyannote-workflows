@@ -1,5 +1,6 @@
 import luigi
 import sciluigi
+import pyannote.metrics
 import pyannote.metrics.detection
 import pyannote.metrics.diarization
 import pyannote.core.json
@@ -62,6 +63,40 @@ class EvaluateDiarization(sciluigi.Task, AutoOutput):
                 'purity': purity(reference, hypothesis, detailed=True),
                 'coverage': coverage(reference, hypothesis, detailed=True),
                 'diarization': diarization(reference, hypothesis, detailed=True)
+            }
+        }
+
+        with self.out_put().open('w') as fp:
+            pyannote.core.json.dump(results, fp)
+
+
+class EvaluateDiarizationFast(sciluigi.Task, AutoOutput):
+
+    in_hypothesis = None
+    in_reference = None
+
+    def run(self):
+
+        with self.in_reference().open('r') as f:
+            reference = pyannote.core.json.load(f)
+
+        with self.in_hypothesis().open('r') as f:
+            hypothesis = pyannote.core.json.load(f)
+
+        diarizationPurity = pyannote.metrics.diarization.DiarizationPurity()
+        diarizationCoverage = pyannote.metrics.diarization.DiarizationCoverage()
+
+        purity = diarizationPurity(reference, hypothesis, detailed=True)
+        coverage = diarizationCoverage(reference, hypothesis, detailed=True)
+        f_measure = pyannote.metrics.f_measure(purity, coverage, beta=1.)
+
+        results = {
+            'reference': reference,
+            'hypothesis': hypothesis,
+            'evaluation': {
+                'purity': purity,
+                'coverage': coverage,
+                'f_measure': f_measure
             }
         }
 
