@@ -88,7 +88,7 @@ class EvaluateDiarizationFast(sciluigi.Task, AutoOutput):
 
         purity = diarizationPurity(reference, hypothesis, detailed=True)
         coverage = diarizationCoverage(reference, hypothesis, detailed=True)
-        f_measure = pyannote.metrics.f_measure(purity, coverage, beta=1.)
+        f_measure = pyannote.metrics.f_measure(purity['purity'], coverage['coverage'], beta=1.)
 
         results = {
             'reference': reference,
