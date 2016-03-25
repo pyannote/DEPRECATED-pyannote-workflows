@@ -3,13 +3,14 @@ import sciluigi
 
 import pyannote_workflows.tasks.speech
 import pyannote_workflows.tasks.evaluation
+import pyannote_workflows.tasks.tvd_dataset
 import pyannote_workflows.utils
 
 
 class Baseline(sciluigi.WorkflowTask):
 
     workdir = luigi.Parameter(default='/work')
-
+    tvddir = luigi.Parameter(default='/tvd')
     series = luigi.Parameter(default='GameOfThrones')
     season = luigi.IntParameter(default=1)
     episode = luigi.IntParameter(default=1)
@@ -60,6 +61,7 @@ class Baseline(sciluigi.WorkflowTask):
         audio = self.new_task(
             'audio',
             pyannote_workflows.tasks.tvd_dataset.Audio,
+            tvddir=self.tvddir,
             series=self.series,
             season=self.season,
             episode=self.episode,
@@ -69,6 +71,7 @@ class Baseline(sciluigi.WorkflowTask):
             'speakerReference',
             pyannote_workflows.tasks.tvd_dataset.Speaker,
             workdir=self.workdir,
+            tvddir=self.tvddir,
             series=self.series,
             season=self.season,
             episode=self.episode)
