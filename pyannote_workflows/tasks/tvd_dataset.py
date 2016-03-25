@@ -22,6 +22,7 @@ def get_episode(task):
 
 class Audio(sciluigi.ExternalTask):
 
+    tvddir = luigi.Parameter()
     series = luigi.Parameter()
     season = luigi.IntParameter()
     episode = luigi.IntParameter()
@@ -29,7 +30,7 @@ class Audio(sciluigi.ExternalTask):
 
     def out_put(self):
 
-        dataset = series_plugins[self.series]('/tvd', acknowledgment=False)
+        dataset = series_plugins[self.series](self.tvddir, acknowledgment=False)
         episode = get_episode(self)
         path = dataset.path_to_audio(episode, language=self.language)
         return sciluigi.TargetInfo(self, path)
@@ -37,6 +38,7 @@ class Audio(sciluigi.ExternalTask):
 
 class Subtitles(sciluigi.Task, AutoOutput):
 
+    tvddir = luigi.Parameter()
     series = luigi.Parameter()
     season = luigi.IntParameter()
     episode = luigi.IntParameter()
@@ -44,7 +46,7 @@ class Subtitles(sciluigi.Task, AutoOutput):
 
     def run(self):
 
-        dataset = series_plugins[self.series]('/tvd', acknowledgment=False)
+        dataset = series_plugins[self.series](self.tvddir, acknowledgment=False)
         episode = get_episode(self)
         path = dataset.path_to_subtitles(episode, language=self.language)
 
@@ -131,12 +133,13 @@ class SubtitlesSpeechNonSpeech(sciluigi.Task, AutoOutput):
 
 class Speaker(sciluigi.Task, AutoOutput):
 
+    tvddir = luigi.Parameter()
     series = luigi.Parameter()
     season = luigi.IntParameter()
     episode = luigi.IntParameter()
 
     def run(self):
-        dataset = series_plugins[self.series]('/tvd', acknowledgment=False)
+        dataset = series_plugins[self.series](self.tvddir, acknowledgment=False)
         episode = get_episode(self)
 
         speaker = dataset.get_resource('speaker', episode)
