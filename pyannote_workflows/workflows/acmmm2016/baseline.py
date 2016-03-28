@@ -16,34 +16,20 @@ class Baseline(sciluigi.WorkflowTask):
     episode = luigi.IntParameter(default=1)
     language = luigi.Parameter(default='en')
 
-    speech__fill_gaps = luigi.FloatParameter(default=1.0)
-
-    bicSegmentationFeatures__e = luigi.BoolParameter(default=False)
-    bicSegmentationFeatures__De = luigi.BoolParameter(default=False)
-    bicSegmentationFeatures__DDe = luigi.BoolParameter(default=False)
-    bicSegmentationFeatures__coefs = luigi.IntParameter(default=11)
-    bicSegmentationFeatures__D = luigi.BoolParameter(default=False)
-    bicSegmentationFeatures__DD = luigi.BoolParameter(default=False)
-
-    bicSegmentation__penalty_coef = luigi.FloatParameter(default=1.0)
-    bicSegmentation__covariance_type = luigi.Parameter(default='full')
-    bicSegmentation__min_duration = luigi.FloatParameter(default=1.0)
-    bicSegmentation__precision = luigi.FloatParameter(default=0.1)
-
-    linearBICClusteringFeatures__e = luigi.BoolParameter(default=False)
+    linearBICClusteringFeatures__e = luigi.BoolParameter(default=True)
     linearBICClusteringFeatures__De = luigi.BoolParameter(default=False)
     linearBICClusteringFeatures__DDe = luigi.BoolParameter(default=False)
-    linearBICClusteringFeatures__coefs = luigi.IntParameter(default=11)
+    linearBICClusteringFeatures__coefs = luigi.IntParameter(default=12)
     linearBICClusteringFeatures__D = luigi.BoolParameter(default=False)
     linearBICClusteringFeatures__DD = luigi.BoolParameter(default=False)
 
     linearBICClustering__penalty_coef = luigi.FloatParameter(default=1.0)
     linearBICClustering__covariance_type = luigi.Parameter(default='diag')
 
-    bicClusteringFeatures__e = luigi.BoolParameter(default=False)
+    bicClusteringFeatures__e = luigi.BoolParameter(default=True)
     bicClusteringFeatures__De = luigi.BoolParameter(default=False)
     bicClusteringFeatures__DDe = luigi.BoolParameter(default=False)
-    bicClusteringFeatures__coefs = luigi.IntParameter(default=11)
+    bicClusteringFeatures__coefs = luigi.IntParameter(default=12)
     bicClusteringFeatures__D = luigi.BoolParameter(default=False)
     bicClusteringFeatures__DD = luigi.BoolParameter(default=False)
 
@@ -79,38 +65,10 @@ class Baseline(sciluigi.WorkflowTask):
         speech = self.new_task(
             'speechReference',
             pyannote_workflows.tasks.tvd_dataset.Speech,
-            fill_gaps=self.speech__fill_gaps)
+            to_annotation=True)
 
         speech.in_wav = audio.out_put
         speech.in_speaker = speakerReference.out_put
-
-        # =====================================================================
-        # BIC SEGMENTATION
-        # =====================================================================
-
-        bicSegmentationFeatures = self.new_task(
-            'bicSegmentationFeatures',
-            pyannote_workflows.tasks.speech.MFCC,
-            e=self.bicSegmentationFeatures__e,
-            De=self.bicSegmentationFeatures__De,
-            DDe=self.bicSegmentationFeatures__DDe,
-            coefs=self.bicSegmentationFeatures__coefs,
-            D=self.bicSegmentationFeatures__D,
-            DD=self.bicSegmentationFeatures__DD)
-
-        bicSegmentationFeatures.in_audio = audio.out_put
-
-        bicSegmentation = self.new_task(
-            'bicSegmentation',
-            pyannote_workflows.tasks.speech.BICSegmentation,
-            penalty_coef=self.bicSegmentation__penalty_coef,
-            covariance_type=self.bicSegmentation__covariance_type,
-            min_duration=self.bicSegmentation__min_duration,
-            precision=self.bicSegmentation__precision,
-        )
-
-        bicSegmentation.in_segmentation = speech.out_put
-        bicSegmentation.in_features = bicSegmentationFeatures.out_put
 
         # =====================================================================
         # LINEAR BIC CLUSTERING
@@ -134,7 +92,7 @@ class Baseline(sciluigi.WorkflowTask):
             penalty_coef=self.linearBICClustering__penalty_coef,
             covariance_type=self.linearBICClustering__covariance_type)
 
-        linearBICClustering.in_segmentation = bicSegmentation.out_put
+        linearBICClustering.in_segmentation = speech.out_put
         linearBICClustering.in_features = linearBICClusteringFeatures.out_put
 
         # =====================================================================
