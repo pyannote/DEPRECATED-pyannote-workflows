@@ -181,7 +181,8 @@ class SpeechNonSpeech(sciluigi.Task, AutoOutput):
 
 class Speech(sciluigi.Task, AutoOutput):
 
-    fill_gaps = luigi.FloatParameter(default=1.000)
+    fill_gaps = luigi.FloatParameter(default=0.000)
+    to_annotation = luigi.BoolParameter(default=False)
 
     in_wav = None
     in_speaker = None
@@ -207,7 +208,22 @@ class Speech(sciluigi.Task, AutoOutput):
         for gap in timeline.gaps(extent):
             if gap.duration < self.fill_gaps:
                 timeline.add(gap)
+
         timeline = timeline.coverage()
 
-        with self.out_put().open('w') as fp:
-            pyannote.core.json.dump(timeline, fp)
+        # dump as annotation...
+        if self.to_annotation:
+
+            annotation = Annotation()
+            for s, segment in enumerate(timeline):
+                annotation[segment] = s
+            annotation = annotation.anonymize_labels()
+
+            with self.out_put().open('w') as fp:
+                pyannote.core.json.dump(annotation, fp)
+
+        # ... or as timeline
+        else:
+
+            with self.out_put().open('w') as fp:
+                pyannote.core.json.dump(timeline, fp)
