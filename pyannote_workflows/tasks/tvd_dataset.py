@@ -17,7 +17,7 @@ from pyannote_workflows.utils import AutoOutput
 def get_episode(task):
     return Episode(series=task.series,
                    season=task.season,
-                   episode=task.season)
+                   episode=task.episode)
 
 
 class Audio(sciluigi.ExternalTask):
@@ -139,6 +139,7 @@ class Speaker(sciluigi.Task, AutoOutput):
     episode = luigi.IntParameter()
 
     def run(self):
+
         dataset = series_plugins[self.series](self.tvddir, acknowledgment=False)
         episode = get_episode(self)
 
