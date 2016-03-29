@@ -93,6 +93,8 @@ class SubtitlesAnnotation(sciluigi.Task, AutoOutput):
             annotation[segment] = label
             label += 1
 
+        annotation = annotation.anonymize_labels(generator='string')
+
         with self.out_put().open('w') as fp:
             pyannote.core.json.dump(annotation, fp)
 
@@ -218,7 +220,7 @@ class Speech(sciluigi.Task, AutoOutput):
             annotation = Annotation()
             for s, segment in enumerate(timeline):
                 annotation[segment] = s
-            annotation = annotation.anonymize_labels()
+            annotation = annotation.anonymize_labels(generator='string')
 
             with self.out_put().open('w') as fp:
                 pyannote.core.json.dump(annotation, fp)
