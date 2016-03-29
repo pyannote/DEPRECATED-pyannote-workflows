@@ -39,6 +39,7 @@ class Clustering(sciluigi.Task, AutoOutput):
                 break
 
         result = history[i-1]
+        result = result.anonymize_labels(generator='string')
 
         with self.out_put().open('w') as fp:
             pyannote.core.json.dump(result, fp)
