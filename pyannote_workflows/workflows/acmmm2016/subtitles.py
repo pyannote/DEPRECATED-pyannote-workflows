@@ -4,7 +4,7 @@ import sciluigi
 import pyannote_workflows.tasks.speech
 import pyannote_workflows.tasks.evaluation
 import pyannote_workflows.tasks.tvd_dataset
-import pyannote_workflows.tasks.propgation
+import pyannote_workflows.tasks.propagation
 import pyannote_workflows.utils
 
 
