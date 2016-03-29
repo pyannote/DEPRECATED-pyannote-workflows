@@ -42,7 +42,7 @@ class _Sequences(sciluigi.ExternalTask):
         return sciluigi.TargetInfo(self, path)
 
 
-class _TalkingFace(sciluigi.Task, AutoOutput):
+class _TalkingFace(sciluigi.Task, pyannote_workflows.utils.AutoOutput):
 
     workdir = luigi.Parameter()
     exp = luigi.Parameter(default='Segmentation_0.6Pfa')
@@ -98,7 +98,7 @@ class _TalkingFace(sciluigi.Task, AutoOutput):
             pyannote.core.json.dump(talkingFace, f)
 
 
-class _TalkingFaceClustering(sciluigi.Task, AutoOutput):
+class _TalkingFaceClustering(sciluigi.Task, pyannote_workflows.utils.AutoOutput):
     """Label talking faces with face clusters"""
 
     in_clusters = None
