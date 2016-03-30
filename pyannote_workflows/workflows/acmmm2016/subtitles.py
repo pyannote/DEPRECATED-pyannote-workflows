@@ -17,16 +17,6 @@ class Subtitles(sciluigi.WorkflowTask):
     episode = luigi.IntParameter(default=1)
     language = luigi.Parameter(default='en')
 
-    linearBICClusteringFeatures__e = luigi.BoolParameter(default=True)
-    linearBICClusteringFeatures__De = luigi.BoolParameter(default=False)
-    linearBICClusteringFeatures__DDe = luigi.BoolParameter(default=False)
-    linearBICClusteringFeatures__coefs = luigi.IntParameter(default=12)
-    linearBICClusteringFeatures__D = luigi.BoolParameter(default=False)
-    linearBICClusteringFeatures__DD = luigi.BoolParameter(default=False)
-
-    linearBICClustering__penalty_coef = luigi.FloatParameter(default=1.0)
-    linearBICClustering__covariance_type = luigi.Parameter(default='diag')
-
     bicClusteringFeatures__e = luigi.BoolParameter(default=True)
     bicClusteringFeatures__De = luigi.BoolParameter(default=False)
     bicClusteringFeatures__DDe = luigi.BoolParameter(default=False)
@@ -98,31 +88,6 @@ class Subtitles(sciluigi.WorkflowTask):
         conservativeDirectTagging.in_target = speech.out_put
 
         # =====================================================================
-        # LINEAR BIC CLUSTERING
-        # =====================================================================
-
-        linearBICClusteringFeatures = self.new_task(
-            'linearBICClusteringFeatures',
-            pyannote_workflows.tasks.speech.MFCC,
-            e=self.linearBICClusteringFeatures__e,
-            De=self.linearBICClusteringFeatures__De,
-            DDe=self.linearBICClusteringFeatures__DDe,
-            coefs=self.linearBICClusteringFeatures__coefs,
-            D=self.linearBICClusteringFeatures__D,
-            DD=self.linearBICClusteringFeatures__DD)
-
-        linearBICClusteringFeatures.in_audio = audio.out_put
-
-        linearBICClustering = self.new_task(
-            'linearBICClustering',
-            pyannote_workflows.tasks.speech.LinearBICClustering,
-            penalty_coef=self.linearBICClustering__penalty_coef,
-            covariance_type=self.linearBICClustering__covariance_type)
-
-        linearBICClustering.in_segmentation = conservativeDirectTagging.out_put
-        linearBICClustering.in_features = linearBICClusteringFeatures.out_put
-
-        # =====================================================================
         # BIC CLUSTERING
         # =====================================================================
 
@@ -144,7 +109,7 @@ class Subtitles(sciluigi.WorkflowTask):
             penalty_coef=self.bicClustering__penalty_coef,
             covariance_type=self.bicClustering__covariance_type)
 
-        bicClustering.in_segmentation = linearBICClustering.out_put
+        bicClustering.in_segmentation = conservativeDirectTagging.out_put
         bicClustering.in_features = bicClusteringFeatures.out_put
 
         # =====================================================================
