@@ -55,6 +55,12 @@ class AutoOutput(object):
 
         # generate out_put path automatically
         output_path = '{workdir}/{workflow_name}/{instance_name}/{digest}'
+
+        # save it into parent workflow task
+        if not hasattr(self.workflow_task, 'auto_output'):
+            self.workflow_task.auto_output = {}
+        self.workflow_task.auto_output[self.instance_name] = output_path
+
         return output_path.format(
             workdir=workdir,
             instance_name=self.instance_name,
