@@ -54,18 +54,20 @@ class AutoOutput(object):
             json.dumps(description, sort_keys=True)).hexdigest()
 
         # generate out_put path automatically
-        output_path = '{workdir}/{workflow_name}/{instance_name}/{digest}'
+        TEMPLATE = '{workdir}/{workflow_name}/{instance_name}/{digest}'
+
+        output_path = TEMPLATE.format(
+            workdir=workdir,
+            instance_name=self.instance_name,
+            workflow_name=self.workflow_task.__class__.__name__,
+            digest=digest)
 
         # save it into parent workflow task
         if not hasattr(self.workflow_task, 'auto_output'):
             self.workflow_task.auto_output = {}
         self.workflow_task.auto_output[self.instance_name] = output_path
-
-        return output_path.format(
-            workdir=workdir,
-            instance_name=self.instance_name,
-            workflow_name=self.workflow_task.__class__.__name__,
-            digest=digest)
+        
+        return output_path
 
     def out_put(self):
         # automagically get out_put path
