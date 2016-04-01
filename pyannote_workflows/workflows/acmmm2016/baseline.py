@@ -5,6 +5,7 @@ import pyannote_workflows.tasks.speech
 import pyannote_workflows.tasks.evaluation
 import pyannote_workflows.tasks.tvd_dataset
 import pyannote_workflows.utils
+from pprint import pprint
 
 
 class Baseline(sciluigi.WorkflowTask):
@@ -130,6 +131,9 @@ class Baseline(sciluigi.WorkflowTask):
 
         evaluateDiarization.in_hypothesis = bicClustering.out_put
         evaluateDiarization.in_reference = speakerReference.out_put
+
+        if hasattr(self, 'auto_output'):
+            pprint(self.auto_output)
 
         if self.hyperopt is not None:
             hyperopt = self.new_task(
