@@ -20,7 +20,7 @@ class _ShotBoundaryDetection(sciluigi.Task):
         corpus = video.corpus
         show = video.show
         path = TEMPLATE.format(
-            workdir=self.workdir, corpus=self.corpus, show=self.show)
+            workdir=self.workdir, corpus=corpus, show=show)
         return sciluigi.TargetInfo(self, path)
 
     def run(self):
@@ -44,7 +44,7 @@ class _ShotThreading(sciluigi.Task):
         corpus = video.corpus
         show = video.show
         path = TEMPLATE.format(
-            workdir=self.workdir, corpus=self.corpus, show=self.show)
+            workdir=self.workdir, corpus=corpus, show=show)
         return sciluigi.TargetInfo(self, path)
 
     def run(self):
@@ -53,8 +53,7 @@ class _ShotThreading(sciluigi.Task):
         with self.in_shot().open('r') as fp:
             shot = pyannote.core.json.load(fp)
 
-        threads = pyannote.video.structure.Thread(video, shot=shot)
-        threads = threads.smooth()
+        threads = pyannote.video.structure.Thread(video, shot=shot)()
 
         with self.out_put().open('w') as fp:
             pyannote.core.json.dump(threads, fp)
@@ -73,11 +72,15 @@ class BaselineShots(sciluigi.Task):
         corpus = video.corpus
         show = video.show
         path = TEMPLATE.format(
-            workdir=self.workdir, corpus=self.corpus, show=self.show)
+            workdir=self.workdir, corpus=corpus, show=show)
         return sciluigi.TargetInfo(self, path)
 
     def run(self):
 
+        video = self.in_video().task
+        corpus = video.corpus
+        show = video.show
+        
         # INA F2_TS/20130607/130607FR20000_B.MPG 000123 00595.400 00598.240
         TEMPLATE = '{corpus} {show} {index:06d} {start:09.3f} {end:09.3f}\n'
 
@@ -139,3 +142,7 @@ class ShotWorkflow(sciluigi.WorkflowTask):
         baselineShots.in_thread = _shotThreading.out_put
 
         return baselineShots
+
+
+if __name__ == '__main__':
+    sciluigi.run_local(main_task_cls=ShotWorkflow)
