@@ -315,3 +315,7 @@ class FaceWorkflow(sciluigi.WorkflowTask):
         faceClustering.in_openface = _openface.out_put
 
         return faceClustering
+
+
+if __name__ == '__main__':
+        sciluigi.run_local(main_task_cls=FaceWorkflow)
