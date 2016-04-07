@@ -1,6 +1,7 @@
 import luigi
 import sciluigi
 
+import pyannote_workflows.tasks.face
 import pyannote_workflows.tasks.evaluation
 import pyannote_workflows.tasks.tvd_dataset
 import pyannote_workflows.utils
