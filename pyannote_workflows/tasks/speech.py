@@ -79,12 +79,14 @@ class LinearBICClustering(sciluigi.Task, AutoOutput):
     in_segmentation = None
     in_features = None
 
+    max_gap = luigi.FloatParameter(default=3600.0)
     penalty_coef = luigi.FloatParameter(default=1.0)
     covariance_type = luigi.Parameter(default='diag')
 
     def run(self):
 
         clustering = pyannote.algorithms.clustering.bic.LinearBICClustering(
+            max_gap=self.max_gap,
             penalty_coef=self.penalty_coef,
             covariance_type=self.covariance_type)
 
