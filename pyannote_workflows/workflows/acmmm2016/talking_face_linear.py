@@ -142,6 +142,7 @@ class TalkingFaceLinear(sciluigi.WorkflowTask):
     linearBICClusteringFeatures__D = luigi.BoolParameter(default=False)
     linearBICClusteringFeatures__DD = luigi.BoolParameter(default=False)
 
+    linearBICClustering__max_gap = luigi.FloatParameter(default=3600.)
     linearBICClustering__penalty_coef = luigi.FloatParameter(default=1.0)
     linearBICClustering__covariance_type = luigi.Parameter(default='diag')
 
@@ -261,6 +262,7 @@ class TalkingFaceLinear(sciluigi.WorkflowTask):
         linearBICClustering = self.new_task(
             'linearBICClustering',
             pyannote_workflows.tasks.speech.LinearBICClustering,
+            max_gap=self.linearBICClustering__max_gap,
             penalty_coef=self.linearBICClustering__penalty_coef,
             covariance_type=self.linearBICClustering__covariance_type)
 
