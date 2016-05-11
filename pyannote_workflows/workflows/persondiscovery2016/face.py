@@ -219,7 +219,7 @@ class FaceClustering(sciluigi.Task):
         corpus = video.corpus
         show = video.show
         path = TEMPLATE.format(
-            workdir=self.workdir, corpus=self.corpus, show=self.show)
+            workdir=self.workdir, corpus=corpus, show=show)
         return sciluigi.TargetInfo(self, path)
 
     def run(self):
