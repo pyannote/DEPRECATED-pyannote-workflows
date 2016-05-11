@@ -1,6 +1,7 @@
 import luigi
 import sciluigi
 
+import ssl
 import cv2
 import six.moves.urllib.request
 import urllib
@@ -42,7 +43,8 @@ class _DLIBModel(sciluigi.Task):
 
     def run(self):
         URL = "https://raw.githubusercontent.com/pyannote/pyannote-data/master/dlib.face.landmarks.dat"
-        resource = six.moves.urllib.request.urlopen(URL)
+        context = ssl._create_unverified_context()
+        resource = six.moves.urllib.request.urlopen(URL, context=context)
         with self.out_put().open('wb') as fp:
             fp.write(resource.read())
 
@@ -58,7 +60,8 @@ class _OpenfaceModel(sciluigi.Task):
 
     def run(self):
         URL = "https://raw.githubusercontent.com/pyannote/pyannote-data/master/openface.nn4.small2.v1.t7"
-        resource = six.moves.urllib.request.urlopen(URL)
+        context = ssl._create_unverified_context()
+        resource = six.moves.urllib.request.urlopen(URL, context=context)
         with self.out_put().open('wb') as fp:
             fp.write(resource.read())
 
