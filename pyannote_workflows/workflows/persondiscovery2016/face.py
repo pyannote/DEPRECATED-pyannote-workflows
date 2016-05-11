@@ -299,7 +299,7 @@ class FaceWorkflow(sciluigi.WorkflowTask):
 
         _openface = self.new_task(
             '_openface',
-            _OpenFace,
+            _Openface,
             workdir=self.workdir)
 
         _openface.in_video = video.out_put
