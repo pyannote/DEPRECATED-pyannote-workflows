@@ -27,7 +27,7 @@ class _ShotThreading(sciluigi.ExternalTask):
         corpus = video.corpus
         show = video.show
         path = TEMPLATE.format(
-            workdir=self.workdir, corpus=self.corpus, show=self.show)
+            workdir=self.workdir, corpus=corpus, show=show)
         return sciluigi.TargetInfo(self, path)
 
 
@@ -75,7 +75,7 @@ class FaceTracking(sciluigi.Task):
         corpus = video.corpus
         show = video.show
         path = TEMPLATE.format(
-            workdir=self.workdir, corpus=self.corpus, show=self.show)
+            workdir=self.workdir, corpus=corpus, show=show)
         return sciluigi.TargetInfo(self, path)
 
     def run(self):
@@ -120,7 +120,7 @@ class _FaceLandmarks(sciluigi.Task):
         corpus = video.corpus
         show = video.show
         path = TEMPLATE.format(
-            workdir=self.workdir, corpus=self.corpus, show=self.show)
+            workdir=self.workdir, corpus=corpus, show=show)
         return sciluigi.TargetInfo(self, path)
 
     def run(self):
@@ -172,7 +172,7 @@ class _Openface(sciluigi.Task):
         corpus = video.corpus
         show = video.show
         path = TEMPLATE.format(
-            workdir=self.workdir, corpus=self.corpus, show=self.show)
+            workdir=self.workdir, corpus=corpus, show=show)
         return sciluigi.TargetInfo(self, path)
 
     def run(self):
