@@ -14,11 +14,24 @@ class Video(sciluigi.ExternalTask):
     def out_put(self):
 
         INA_TEMPLATE = '{corpus_dir}/INA/LAffaireSnowden/medias_reencoded/tv/{show}.mp4'
+        UPC_TEMPLATE = '{corpus_dir}/3-24/{show}.mp4'
+        # DW_TEMPLATE = '{corpus_dir}/DW/{show}.mp4'
 
         if self.corpus == 'INA':
             path = INA_TEMPLATE.format(
                 corpus_dir=self.corpus_dir,
                 show=self.show)
+
+        elif self.corpus == 'UPC':
+            path = UPC_TEMPLATE.format(
+                corpus_dir=self.corpus_dir,
+                show=self.show)
+
+        elif self.corpus == 'DW':
+            raise NotImplementedError('')
+
+        else:
+            raise NotImplementedError('')
 
         return sciluigi.TargetInfo(self, path)
 
@@ -32,14 +45,26 @@ class Audio(sciluigi.ExternalTask):
     def out_put(self):
 
         INA_TEMPLATE = '{corpus_dir}/INA/LAffaireSnowden/medias_reencoded/tv/{show}.wav'
+        UPC_TEMPLATE = '{corpus_dir}/3-24/{show}.wav'
+        # DW_TEMPLATE = '{corpus_dir}/DW/{show}.wav'
 
         if self.corpus == 'INA':
             path = INA_TEMPLATE.format(
                 corpus_dir=self.corpus_dir,
                 show=self.show)
 
-        return sciluigi.TargetInfo(self, path)
+        elif self.corpus == 'UPC':
+            path = UPC_TEMPLATE.format(
+                corpus_dir=self.corpus_dir,
+                show=self.show)
 
+        elif self.corpus == 'DW':
+            raise NotImplementedError('')
+
+        else:
+            raise NotImplementedError('')
+
+        return sciluigi.TargetInfo(self, path)
 
 
 def _getFaceGenerator(tracking, frame_width, frame_height, double=True):
