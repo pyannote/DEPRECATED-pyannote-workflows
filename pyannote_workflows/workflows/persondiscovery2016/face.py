@@ -45,7 +45,7 @@ class _DLIBModel(sciluigi.Task):
         URL = "https://raw.githubusercontent.com/pyannote/pyannote-data/master/dlib.face.landmarks.dat"
         context = ssl._create_unverified_context()
         resource = six.moves.urllib.request.urlopen(URL, context=context)
-        with self.out_put().open('wb') as fp:
+        with self.out_put().open('w') as fp:
             fp.write(resource.read())
 
 
@@ -62,7 +62,7 @@ class _OpenfaceModel(sciluigi.Task):
         URL = "https://raw.githubusercontent.com/pyannote/pyannote-data/master/openface.nn4.small2.v1.t7"
         context = ssl._create_unverified_context()
         resource = six.moves.urllib.request.urlopen(URL, context=context)
-        with self.out_put().open('wb') as fp:
+        with self.out_put().open('w') as fp:
             fp.write(resource.read())
 
 
@@ -132,7 +132,7 @@ class _FaceLandmarks(sciluigi.Task):
         frame_width, frame_height = video.frame_size
 
         tracking = self.in_tracking().path
-        face_generator = pyannote_workflows.task.person_discovery_2016._getFaceGenerator(
+        face_generator = pyannote_workflows.tasks.person_discovery_2016._getFaceGenerator(
             tracking, frame_width, frame_height, double=False)
         face_generator.send(None)
 
@@ -153,7 +153,7 @@ class _FaceLandmarks(sciluigi.Task):
                     landmarks = face._get_landmarks(rgb, boundingBox)
 
                     fp.write('{t:.3f} {identifier:d}'.format(
-                        t=T, identifier=identifier))
+                        t=T, identifier=int(identifier)))
 
                     for x, y in landmarks:
                         fp.write(' {x:.5f} {y:.5f}'.format(
@@ -183,9 +183,9 @@ class _Openface(sciluigi.Task):
         video = pyannote.video.Video(self.in_video().path)
         frame_width, frame_height = video.frame_size
 
-        landmarks = self.in_tracking().path
-        landmark_generator = pyannote_workflows.task.person_discovery_2016._getLandmarkGenerator(
-            landmarks, frame_width, frame_height, double=True)
+        landmarks = self.in_landmarks().path
+        landmark_generator = pyannote_workflows.tasks.person_discovery_2016._getLandmarkGenerator(
+            landmarks, frame_width, frame_height)
         landmark_generator.send(None)
 
         model = self.in_model().path
