@@ -2,6 +2,7 @@ import luigi
 import sciluigi
 import numpy as np
 import pandas as pd
+import pandas.io.common
 import dlib
 
 
@@ -14,9 +15,12 @@ class Video(sciluigi.ExternalTask):
     def out_put(self):
 
         INA_TEMPLATE = '{corpus_dir}/INA/LAffaireSnowden/medias_reencoded/tv/{show}.mp4'
-        UPC_TEMPLATE = '{corpus_dir}/3-24/{show}.mp4'
+        UPC_TEMPLATE = '{corpus_dir}/3-24/media/{show}.mp4'
         # DW_TEMPLATE = '{corpus_dir}/DW/{show}.mp4'
-
+        TRAILER_TEMPLATE = '{corpus_dir}/{show}.mp4'
+        TVD_TEMPLATE = '{corpus_dir}/{corpus}/dvd/rip/video/{show}.mkv'
+        EASTENDERS_TEMPLATE = '{corpus_dir}/{show}.mp4'
+        
         if self.corpus == 'INA':
             path = INA_TEMPLATE.format(
                 corpus_dir=self.corpus_dir,
@@ -29,6 +33,28 @@ class Video(sciluigi.ExternalTask):
 
         elif self.corpus == 'DW':
             raise NotImplementedError('')
+
+        elif self.corpus == 'TRAILER':
+            path = TRAILER_TEMPLATE.format(
+                corpus_dir=self.corpus_dir,
+                show=self.show)
+
+        elif self.corpus == 'TheBigBangTheory':
+            path = TVD_TEMPLATE.format(
+                corpus=self.corpus,
+                corpus_dir=self.corpus_dir,
+                show=self.show)
+
+        elif self.corpus == 'GameOfThrones':
+            path = TVD_TEMPLATE.format(
+                corpus=self.corpus,
+                corpus_dir=self.corpus_dir,
+                show=self.show)
+
+        elif self.corpus == 'EastEnders':
+            path = EASTENDERS_TEMPLATE.format(
+                corpus_dir=self.corpus_dir,
+                show=self.show)
 
         else:
             raise NotImplementedError('')
@@ -134,8 +160,13 @@ def _getLandmarkGenerator(shape, frame_width, frame_height):
     """Parse precomputed shape file and generate timestamped shapes"""
 
     # load landmarks file
-    shape = pd.read_table(shape, delim_whitespace=True, header=None)
-
+    try:
+        shape = pd.read_table(shape, delim_whitespace=True, header=None)
+    except pandas.io.common.EmptyDataError as e:
+        t = yield
+        while True:
+            t = yield t, []
+    
     # deduce number of landmarks from file dimension
     _, d = shape.shape
     n_points = (d - 2) / 2
