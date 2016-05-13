@@ -234,8 +234,10 @@ class FaceClustering(sciluigi.Task):
 
         openface = self.in_openface().path
         starting_point, features = clustering.model.preprocess(openface)
-
-        result = clustering(starting_point, features=features)
+        if starting_point:
+            result = clustering(starting_point, features=features)
+        else:
+            result = starting_point
 
         with self.out_put().open('w') as fp:
             for _, identifier, cluster in result.itertracks(label=True):
