@@ -16,7 +16,7 @@ class Video(sciluigi.ExternalTask):
 
         INA_TEMPLATE = '{corpus_dir}/INA/LAffaireSnowden/medias_reencoded/tv/{show}.mp4'
         UPC_TEMPLATE = '{corpus_dir}/3-24/media/{show}.mp4'
-        # DW_TEMPLATE = '{corpus_dir}/DW/{show}.mp4'
+        DW_TEMPLATE = '{corpus_dir}/DW/{show}.mp4'
         TRAILER_TEMPLATE = '{corpus_dir}/{show}.mp4'
         TVD_TEMPLATE = '{corpus_dir}/{corpus}/dvd/rip/video/{show}.mkv'
         EASTENDERS_TEMPLATE = '{corpus_dir}/{show}.mp4'
@@ -32,7 +32,9 @@ class Video(sciluigi.ExternalTask):
                 show=self.show)
 
         elif self.corpus == 'DW':
-            raise NotImplementedError('')
+            path = DW_TEMPLATE.format(
+                corpus_dir=self.corpus_dir,
+                show=self.show)
 
         elif self.corpus == 'TRAILER':
             path = TRAILER_TEMPLATE.format(
